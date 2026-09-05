@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: nyc_311                       # Logical source name
     database: bigquery-public-data  # Optional in BigQuery, usually same as project
-    schema: nyc_311                     # BigQuery dataset name
+    schema: new_york                     # BigQuery dataset name
     freshness:                      # Dataset freshness: Optional
       warn_after: { count: 32, period: day }
       error_after: { count: 40, period: day }
@@ -18,8 +18,8 @@ sources:
 
 
   - name: census_bureau     # Logical source name
-    database: census_bureau_acs    # Optional in BigQuery, usually same as project
-    schema: zip_codes_2018_5yr   # BigQuery dataset name
+    database: bigquery-public-data    # Optional in BigQuery, usually same as project
+    schema: census_bureau_acs   # BigQuery dataset name
     tables:
       - name: zip_codes_2018_5yr                # Table name in BigQuery
         description: "ZIP code data from the 2018 5-year ACS."

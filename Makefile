@@ -12,6 +12,9 @@ endif
 dbt: ## Run dbt with ARGS, e.g. `make dbt ARGS="run --select stg_users"`
 	dbt $(ARGS)
 
+dbt-run: ## Run dbt with ARGS, e.g. `make dbt ARGS="run --select stg_users"`
+	dbt run $(ARGS)
+
 build: ## Build the Docker image
 	docker build -t nyc-311-analysis .
 
