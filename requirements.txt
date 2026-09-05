@@ -1,6 +1,8 @@
 # Setup
 setuptools
 wheel
+python-dotenv
+pytest
 
 # Data
 pandas

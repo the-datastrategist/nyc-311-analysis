@@ -1,5 +1,5 @@
 {{ config(materialized='view') }}
 
--- This is a staging model for the BLS CPI U dataset
+-- This is a staging model for the Census Bureau ZIP code dataset
 select *
-from `bigquery-public-data.google_analytics_sample.ga_sessions_*`
+from {{ source('census_bureau', 'zip_codes_2018_5yr') }}

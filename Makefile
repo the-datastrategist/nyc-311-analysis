@@ -8,27 +8,30 @@ ifneq ("$(wildcard .env)","")
 	export $(shell sed 's/=.*//' .env)
 endif
 
-.PHONY: dbt
+.PHONY: dbt build dbt-build debug docs serve-docs test seed help
 dbt: ## Run dbt with ARGS, e.g. `make dbt ARGS="run --select stg_users"`
-	poetry run dbt $(ARGS)
+	dbt $(ARGS)
+
+build: ## Build the Docker image
+	docker build -t nyc-311-analysis .
+
+dbt-build: ## Run dbt build locally
+	$(MAKE) dbt ARGS="build"
 
 debug: ## Run dbt debug
-	make dbt ARGS="debug"
-
-build: ## Run dbt build
-	make dbt ARGS="build"
+	$(MAKE) dbt ARGS="debug"
 
 docs: ## Generate dbt docs
-	make dbt ARGS="docs generate"
+	$(MAKE) dbt ARGS="docs generate"
 
 serve-docs: ## Serve dbt docs locally
-	make dbt ARGS="docs serve"
+	$(MAKE) dbt ARGS="docs serve"
 
 test: ## Run dbt tests
-	make dbt ARGS="test"
+	$(MAKE) dbt ARGS="test"
 
 seed: ## Run dbt seed
-	make dbt ARGS="seed"
+	$(MAKE) dbt ARGS="seed"
 
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' Makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "🔹 %-20s %s\n", $$1, $$2}'
