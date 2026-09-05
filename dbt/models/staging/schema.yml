@@ -1,0 +1,31 @@
+version: 2
+
+sources:
+  - name: bls                       # Logical source name
+    database: bigquery-public-data  # Optional in BigQuery, usually same as project
+    schema: bls                     # BigQuery dataset name
+    freshness:                      # Dataset freshness: Optional
+      warn_after: { count: 32, period: day }
+      error_after: { count: 40, period: day }
+    tables:
+      - name: cpi_u                # Table name in BigQuery
+        description: "Data on the consumer price index"
+        columns:
+          - name: series_id
+            tests:
+              - not_null
+      - name: cpsaat18
+        description: "Lorem ipsum dolor sit amet"
+        # columns:
+
+
+  - name: google_analytics_sample     # Logical source name
+    database: bigquery-public-data    # Optional in BigQuery, usually same as project
+    schema: google_analytics_sample   # BigQuery dataset name
+    tables:
+      - name: ga_sessions                # Table name in BigQuery
+        description: "Obfuscated Google Analytics 360 data."
+        # columns:
+          # - name: visitId
+          #   tests:
+          #     - unique
