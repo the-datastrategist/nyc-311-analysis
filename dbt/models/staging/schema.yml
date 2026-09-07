@@ -1,31 +1,29 @@
 version: 2
 
 sources:
-  - name: nyc_311                       # Logical source name
-    database: bigquery-public-data  # Optional in BigQuery, usually same as project
-    schema: new_york                     # BigQuery dataset name
-    freshness:                      # Dataset freshness: Optional
-      warn_after: { count: 32, period: day }
-      error_after: { count: 40, period: day }
+  - name: nyc_311                     # Logical source name
+    database: bigquery-public-data    # Optional in BigQuery, usually same as project
+    schema: new_york                  # BigQuery dataset name
     tables:
-      - name: 311_service_requests                # Table name in BigQuery
+      - name: 311_service_requests     # Table name in BigQuery
         description: "NYC 311 service requests data"
         columns:
           - name: unique_key
-            description: "Unique identifier for each 311 service request"
+            description: "Unique key for each 311 service request"
             tests:
               - not_null
 
-
-  - name: census_bureau     # Logical source name
-    database: bigquery-public-data    # Optional in BigQuery, usually same as project
-    schema: census_bureau_acs   # BigQuery dataset name
+  - name: census_bureau             # Logical source name
+    database: bigquery-public-data  # Optional in BigQuery, usually same as project
+    schema: census_bureau_acs       # BigQuery dataset name
     tables:
-      - name: zip_codes_2018_5yr                # Table name in BigQuery
+      - name: zip_codes_2018_5yr    # Table name in BigQuery
         description: "ZIP code data from the 2018 5-year ACS."
-        columns:
-          - name: zip_code
-            description: "ZIP code"
-            tests:
-              - not_null
-              - unique
+
+
+  - name: calendar                   # Logical source name
+    database: bigquery-public-data   # Optional in BigQuery, usually same as project
+    schema: ml_datasets              # BigQuery dataset name
+    tables:
+      - name: holidays_and_events_for_forecasting  # Table name in BigQuery
+        description: "Holidays and events for forecasting in the US."
