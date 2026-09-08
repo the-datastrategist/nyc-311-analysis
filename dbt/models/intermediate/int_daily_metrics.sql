@@ -133,19 +133,19 @@ service_requests_ratios as (
     safe_divide(stddev_requests_last_365day, avg_requests_last_365day) as cv_requests_last_365day,
 
     -- Date Part Comparisons
-    safe_divide(avg_requests_last_3day, avg_requests_prev_3day)   as requests_pop_3day,
-    safe_divide(avg_requests_last_7day, avg_requests_prev_7day)   as requests_pop_7day,
-    safe_divide(avg_requests_last_14day, avg_requests_prev_14day) as requests_pop_14day,
-    safe_divide(avg_requests_last_28day, avg_requests_prev_28day) as requests_pop_28day,
+    safe_divide(avg_requests_last_3day, avg_requests_prev_3day) - 1   as requests_pop_3day,
+    safe_divide(avg_requests_last_7day, avg_requests_prev_7day) - 1   as requests_pop_7day,
+    safe_divide(avg_requests_last_14day, avg_requests_prev_14day) - 1   as requests_pop_14day,
+    safe_divide(avg_requests_last_28day, avg_requests_prev_28day) - 1   as requests_pop_28day,
 
-    safe_divide(avg_requests_last_90day, avg_requests_prev_90day)  as requests_pop_90day,
-    safe_divide(avg_requests_last_180day, avg_requests_prev_180day) as requests_pop_180day,
-    safe_divide(avg_requests_last_365day, avg_requests_prev_365day) as requests_pop_365day,
+    safe_divide(avg_requests_last_90day, avg_requests_prev_90day) - 1   as requests_pop_90day,
+    safe_divide(avg_requests_last_180day, avg_requests_prev_180day) - 1   as requests_pop_180day,
+    safe_divide(avg_requests_last_365day, avg_requests_prev_365day) - 1 as requests_pop_365day,
 
     -- DOW comparisons
-    safe_divide(avg_requests_last_7day_dow, avg_requests_prev_7day_dow)   as requests_pop_7day_dow,
-    safe_divide(avg_requests_last_14day_dow, avg_requests_prev_14day_dow) as requests_pop_14day_dow,
-    safe_divide(avg_requests_last_28day_dow, avg_requests_prev_28day_dow) as requests_pop_28day_dow,
+    safe_divide(avg_requests_last_7day_dow, avg_requests_prev_7day_dow) - 1   as requests_pop_7day_dow,
+    safe_divide(avg_requests_last_14day_dow, avg_requests_prev_14day_dow) - 1 as requests_pop_14day_dow,
+    safe_divide(avg_requests_last_28day_dow, avg_requests_prev_28day_dow) - 1 as requests_pop_28day_dow,
 
   from service_requests_metrics
 )

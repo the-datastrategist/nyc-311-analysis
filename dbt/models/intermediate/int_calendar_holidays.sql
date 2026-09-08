@@ -51,12 +51,12 @@ calendar_holidays as (
 calendar_numbers as (
   select
     * except(days_since_holiday),
-    coalesce(days_since_holiday, 0)   as days_since_holiday,
-    if(days_since_holiday is null, false, true) as has_days_since_holiday,
-    asof_year * 12 + asof_month      as month_number,
-    asof_year * 12 * 30 + asof_month * 30 + asof_day as day_number,
-    sin(asof_year * 12 + asof_month) as sin_month_number,
-    cos(asof_year * 12 + asof_month) as cos_month_number,
+    coalesce(days_since_holiday, 0)                       as days_since_holiday,
+    if(days_since_holiday is null, false, true)           as has_days_since_holiday,
+    asof_year * 12 + asof_month                           as month_number,
+    asof_year * 12 * 30 + asof_month * 30 + asof_day      as day_number,
+    sin(asof_year * 12 + asof_month)                      as sin_month_number,
+    cos(asof_year * 12 + asof_month)                      as cos_month_number,
     sin(asof_year * 12 * 30 + asof_month * 30 + asof_day) as sin_day_number,
     cos(asof_year * 12 * 30 + asof_month * 30 + asof_day) as cos_day_number,
   from calendar_holidays
