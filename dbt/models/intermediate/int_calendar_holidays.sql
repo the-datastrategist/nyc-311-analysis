@@ -46,6 +46,10 @@ calendar_holidays as (
     on c.asof_date between
       date_sub(h.primary_date, interval h.preholiday_days day)
       and date_add(h.primary_date, interval h.postholiday_days day)
+  qualify row_number() over (
+    partition by c.asof_date
+    order by abs(date_diff(c.asof_date, h.primary_date, day))
+  ) = 1
 ),
 
 calendar_numbers as (

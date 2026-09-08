@@ -116,8 +116,11 @@ We break the ML workflow into these processes:
 ##### Deliverables
 
 - [Github](https://github.com/the-datastrategist/nyc-311-analysis)
+
 - [Presentation deck](https://docs.google.com/presentation/d/12Cg4EG7-RMxqPaBlU-Yu3KDiUAYrobDf/edit?usp=sharing&ouid=101159288067507195509&rtpof=true&sd=true)
-- [Dashboard]()
+
+- [Dashboard](https://datastudio.google.com/s/kkp9H6RpizQ)
+
 
 ##### Referenced sources
 
