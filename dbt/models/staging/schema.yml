@@ -27,3 +27,12 @@ sources:
     tables:
       - name: holidays_and_events_for_forecasting  # Table name in BigQuery
         description: "Holidays and events for forecasting in the US."
+
+  - name: ml                   # Logical source name
+    database: the-data-strategist   # Optional in BigQuery, usually same as project
+    schema: nyc_311_analysis              # BigQuery dataset name
+    tables:
+      - name: ml_fct_train
+        description: "Training fact table for NYC 311 analysis."
+      - name: ml_agency_daily_predictions
+        description: "Predictions for the next day for NYC 311 analysis."

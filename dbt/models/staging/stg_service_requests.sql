@@ -10,6 +10,11 @@ base as (
 base_w_agency_code as (
     select 
         case
+            when agency like 'M%S OFFICE OF SPECIAL ENFORCEMENT' then 'MOSE'
+            when agency = '3-1-1' then 'NYC311'
+        else agency
+        end as agency_code,
+        case
             when agency like 'M%S OFFICE OF SPECIAL ENFORCEMENT' then 'OTHER'
             when agency in (
                 '3-1-1',
@@ -27,7 +32,7 @@ base_w_agency_code as (
                 'OMB'
             ) then 'OTHER'
         else agency
-        end as agency_code,
+        end as agency_group_code,
         *
     from base
 ),
