@@ -159,12 +159,12 @@ vars:
         train:
           source_sql: |
             select *
-            from `the-data-strategist`.`nyc_311_analysis`.`int_agency_daily_features`
+            from `{{ target.database }}`.`{{ target.schema }}`.`int_agency_daily_features`
             where extract(year from asof_date) between 2019 and 2020
         predict:
           source_sql: |
             select *
-            from `the-data-strategist`.`nyc_311_analysis`.`int_agency_daily_features`
+            from `{{ target.database }}`.`{{ target.schema }}`.`int_agency_daily_features`
             where extract(year from asof_date) >= {{ var('predict_min_year', 2021) }}
           output_table: ml_agency_daily_predictions
           outcome_field: predicted_requests_next_1day

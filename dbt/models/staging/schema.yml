@@ -29,7 +29,7 @@ sources:
         description: "Holidays and events for forecasting in the US."
 
   - name: ml                   # Logical source name
-    database: the-data-strategist   # Optional in BigQuery, usually same as project
+    database: "{{ target.database }}"   # Optional in BigQuery, usually same as project
     schema: nyc_311_analysis              # BigQuery dataset name
     tables:
       - name: ml_fct_train

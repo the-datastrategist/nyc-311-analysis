@@ -88,12 +88,12 @@ more details on BQML specifications.
         train:
             source_sql: |
                 select *
-                from `the-data-strategist`.`nyc_311_analysis`.`int_agency_daily_features`
+                from `{{ target.database }}`.`{{ target.schema }}`.`int_agency_daily_features`
                 where extract(year from asof_date) between 2019 and 2020
         predict:
             source_sql: |
                 select *
-                from `the-data-strategist`.`nyc_311_analysis`.`int_agency_daily_features`
+                from `{{ target.database }}`.`{{ target.schema }}`.`int_agency_daily_features`
                 where extract(year from asof_date) >= {{ var('predict_min_year', 2021) }}
                 output_table: ml_agency_daily_predictions
                 outcome_field: predicted_requests_next_1day
@@ -111,6 +111,18 @@ We break the ML workflow into these processes:
 - `make train CONFIG=<model_name>`: Trains, evaluates, and stores a specified model.
 - `make predict CONFIG=<model_name>`: Generates a prediction based on a saved model.
 
+## Resources
+
+##### Deliverables
+
+- [Github]()
+- [Presentation deck](https://docs.google.com/presentation/d/12Cg4EG7-RMxqPaBlU-Yu3KDiUAYrobDf/edit?usp=sharing&ouid=101159288067507195509&rtpof=true&sd=true)
+- [Dashboard]()
+
+##### Referenced sources
+
+I referenced (or copied) information from the following sources during this project:
+- TODO: update resources
 
 ## Next Steps
 
