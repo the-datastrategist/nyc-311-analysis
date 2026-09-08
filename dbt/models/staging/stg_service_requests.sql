@@ -12,6 +12,7 @@ base_w_agency_code as (
         case
             when agency like 'M%S OFFICE OF SPECIAL ENFORCEMENT' then 'OTHER'
             when agency in (
+                '3-1-1',
                 'DCAS',
                 'ACS',
                 'TAX',
@@ -46,9 +47,8 @@ base_w_complaint_type_normalized as (
 base_w_metrics as (
     select 
         *,
-        datediff(closed_date, created_date, hours) as hours_to_close
+        date_diff(closed_date, created_date, hour) as hours_to_close
     from base_w_complaint_type_normalized
 )
 
-
-select * from base_w_complaint_type_normalized
+select * from base_w_metrics
