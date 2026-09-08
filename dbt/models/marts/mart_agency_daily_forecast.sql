@@ -6,7 +6,7 @@ latest_predictions as (
   select * 
   from {{ source('ml', 'ml_agency_daily_predictions') }}
   qualify row_number() over (
-    partition by agency_code, asof_date, model_id 
+    partition by agency_code, asof_date 
     order by predicted_at desc) = 1
 ),
 

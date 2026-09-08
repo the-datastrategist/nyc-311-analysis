@@ -27,7 +27,7 @@ make dbt-run
 
 Run a specific model.
 ```
-make dbt-run ARGS='--select my_model_config'
+make dbt-run ARGS='--select my_model_name'
 ```
 
 ## ML Ops
