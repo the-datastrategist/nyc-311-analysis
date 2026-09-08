@@ -7,7 +7,18 @@ with calendar as (
     is_holiday,
     postholiday_days,
     preholiday_days,
-    days_since_holiday
+    days_since_holiday,
+    has_days_since_holiday,
+    month_number,
+    day_number,
+    asof_dayofweek,
+    asof_day,
+    asof_month,
+    asof_year,
+    sin_month_number,
+    cos_month_number,
+    sin_day_number,
+    cos_day_number
   from {{ ref('int_calendar_holidays') }}
 ),
 
@@ -48,26 +59,6 @@ service_requests_metrics as (
     sum(requests) over (partition by agency_code order by asof_date rows between 1 following and 7 following) as requests_next_7day,
 
     -- Total Rolling Requests
-    sum(requests) over (partition by agency_code order by asof_date rows between 2 preceding and current row)  as requests_last_3day,
-    sum(requests) over (partition by agency_code order by asof_date rows between 6 preceding and current row)  as requests_last_7day,
-    sum(requests) over (partition by agency_code order by asof_date rows between 13 preceding and current row) as requests_last_14day,
-    sum(requests) over (partition by agency_code order by asof_date rows between 27 preceding and current row) as requests_last_28day,
-
-    sum(requests) over (partition by agency_code order by asof_date rows between 89 preceding and current row)  as requests_last_90day,
-    sum(requests) over (partition by agency_code order by asof_date rows between 179 preceding and current row) as requests_last_180day,
-    sum(requests) over (partition by agency_code order by asof_date rows between 364 preceding and current row) as requests_last_365day,
-
-    -- Total Rolling Requests (previous period)
-    sum(requests) over (partition by agency_code order by asof_date rows between 6 preceding and 3 preceding)   as requests_prev_3day,
-    sum(requests) over (partition by agency_code order by asof_date rows between 14 preceding and 7 preceding)  as requests_prev_7day,
-    sum(requests) over (partition by agency_code order by asof_date rows between 28 preceding and 14 preceding) as requests_prev_14day,
-    sum(requests) over (partition by agency_code order by asof_date rows between 56 preceding and 28 preceding) as requests_prev_28day,
-
-    sum(requests) over (partition by agency_code order by asof_date rows between 180 preceding and 90 preceding)  as requests_prev_90day,
-    sum(requests) over (partition by agency_code order by asof_date rows between 360 preceding and 180 preceding) as requests_prev_180day,
-    sum(requests) over (partition by agency_code order by asof_date rows between 730 preceding and 365 preceding) as requests_prev_365day,
-
-    -- Average Rolling Requests
     avg(requests) over (partition by agency_code order by asof_date rows between 2 preceding and current row)  as avg_requests_last_3day,
     avg(requests) over (partition by agency_code order by asof_date rows between 6 preceding and current row)  as avg_requests_last_7day,
     avg(requests) over (partition by agency_code order by asof_date rows between 13 preceding and current row) as avg_requests_last_14day,
@@ -76,6 +67,25 @@ service_requests_metrics as (
     avg(requests) over (partition by agency_code order by asof_date rows between 89 preceding and current row)  as avg_requests_last_90day,
     avg(requests) over (partition by agency_code order by asof_date rows between 179 preceding and current row) as avg_requests_last_180day,
     avg(requests) over (partition by agency_code order by asof_date rows between 364 preceding and current row) as avg_requests_last_365day,
+
+    -- Total Rolling Requests (previous period)
+    avg(requests) over (partition by agency_code order by asof_date rows between 6 preceding and 3 preceding)   as avg_requests_prev_3day,
+    avg(requests) over (partition by agency_code order by asof_date rows between 14 preceding and 7 preceding)  as avg_requests_prev_7day,
+    avg(requests) over (partition by agency_code order by asof_date rows between 28 preceding and 14 preceding) as avg_requests_prev_14day,
+    avg(requests) over (partition by agency_code order by asof_date rows between 56 preceding and 28 preceding) as avg_requests_prev_28day,
+
+    avg(requests) over (partition by agency_code order by asof_date rows between 180 preceding and 90 preceding)  as avg_requests_prev_90day,
+    avg(requests) over (partition by agency_code order by asof_date rows between 360 preceding and 180 preceding) as avg_requests_prev_180day,
+    avg(requests) over (partition by agency_code order by asof_date rows between 730 preceding and 365 preceding) as avg_requests_prev_365day,
+
+    -- Trailing Same Day of Week
+    avg(requests) over (partition by agency_code, asof_dayofweek order by asof_date rows between 6 preceding and current row)  as avg_requests_last_7day_dow,
+    avg(requests) over (partition by agency_code, asof_dayofweek order by asof_date rows between 13 preceding and current row) as avg_requests_last_14day_dow,
+    avg(requests) over (partition by agency_code, asof_dayofweek order by asof_date rows between 27 preceding and current row) as avg_requests_last_28day_dow,
+
+    avg(requests) over (partition by agency_code, asof_dayofweek order by asof_date rows between 14 preceding and 7 preceding)  as avg_requests_prev_7day_dow,
+    avg(requests) over (partition by agency_code, asof_dayofweek order by asof_date rows between 28 preceding and 14 preceding) as avg_requests_prev_14day_dow,
+    avg(requests) over (partition by agency_code, asof_dayofweek order by asof_date rows between 56 preceding and 28 preceding) as avg_requests_prev_28day_dow,
 
     -- Std Dev Rolling Requests
     stddev(requests) over (partition by agency_code order by asof_date rows between 2 preceding and current row)  as stddev_requests_last_3day,
@@ -115,14 +125,19 @@ service_requests_ratios as (
     safe_divide(stddev_requests_last_365day, avg_requests_last_365day) as cv_requests_last_365day,
 
     -- Date Part Comparisons
-    safe_divide(requests_last_3day, requests_prev_3day)   as requests_pop_3day,
-    safe_divide(requests_last_7day, requests_prev_7day)   as requests_pop_7day,
-    safe_divide(requests_last_14day, requests_prev_14day) as requests_pop_14day,
-    safe_divide(requests_last_28day, requests_prev_28day) as requests_pop_28day,
+    safe_divide(avg_requests_last_3day, avg_requests_prev_3day)   as requests_pop_3day,
+    safe_divide(avg_requests_last_7day, avg_requests_prev_7day)   as requests_pop_7day,
+    safe_divide(avg_requests_last_14day, avg_requests_prev_14day) as requests_pop_14day,
+    safe_divide(avg_requests_last_28day, avg_requests_prev_28day) as requests_pop_28day,
 
-    safe_divide(requests_last_90day, requests_prev_90day)  as requests_pop_90day,
-    safe_divide(requests_last_180day, requests_prev_180day) as requests_pop_180day,
-    safe_divide(requests_last_365day, requests_prev_365day) as requests_pop_365day,
+    safe_divide(avg_requests_last_90day, avg_requests_prev_90day)  as requests_pop_90day,
+    safe_divide(avg_requests_last_180day, avg_requests_prev_180day) as requests_pop_180day,
+    safe_divide(avg_requests_last_365day, avg_requests_prev_365day) as requests_pop_365day,
+
+    -- DOW comparisons
+    safe_divide(avg_requests_last_7day_dow, avg_requests_prev_7day_dow)   as requests_pop_7day_dow,
+    safe_divide(avg_requests_last_14day_dow, avg_requests_prev_14day_dow) as requests_pop_14day_dow,
+    safe_divide(avg_requests_last_28day_dow, avg_requests_prev_28day_dow) as requests_pop_28day_dow,
 
   from service_requests_metrics
 )
