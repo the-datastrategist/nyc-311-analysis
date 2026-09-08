@@ -3,11 +3,6 @@
     Validates a trained BQML model and logs the resulting ML.EVALUATE metrics
     to the ml_fct_validate table.
 
-    Uses data.validation.source_sql (see model_configs in dbt_project.yml)
-    when defined. Otherwise calls ML.EVALUATE with no query, which evaluates
-    against the automatic held-out split BQML reserves during training via
-    the model's data_split_method / data_split_eval_fraction parameters.
-
     Usage:
         dbt run-operation validate_bqml_model --args '{model_name: next_day_requests_xgboost}'
 

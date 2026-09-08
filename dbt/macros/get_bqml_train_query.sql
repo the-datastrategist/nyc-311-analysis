@@ -2,9 +2,6 @@
   {#-
     Macro to generate the training SELECT statement used by a BQML CREATE MODEL AS query.
 
-    Uses model_config.data.train.source_sql when provided. Otherwise selects
-    the label + feature columns from model_config.train_ref.
-
     Args:
         model_config: Dictionary containing model configuration from dbt_project.yml
 

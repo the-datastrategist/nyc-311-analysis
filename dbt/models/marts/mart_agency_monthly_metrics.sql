@@ -68,13 +68,24 @@ service_requests_metrics as (
     avg(requests) over (partition by agency_code order by asof_month rows between 11 preceding and current row) as avg_requests_last_12month,
 
     -- Total Rolling Requests (previous period)
-    avg(requests) over (partition by agency_code order by asof_month rows between 5 preceding and 3 preceding)   as avg_requests_prev_3month,
-    avg(requests) over (partition by agency_code order by asof_month rows between 11 preceding and 6 preceding)  as avg_requests_prev_6month,
-    avg(requests) over (partition by agency_code order by asof_month rows between 23 preceding and 12 preceding) as avg_requests_prev_12month,
+    sum(requests) over (partition by agency_code order by asof_month rows between 1 preceding and 1 preceding)   as requests_prev_1month,
+    sum(requests) over (partition by agency_code order by asof_month rows between 5 preceding and 3 preceding)   as requests_prev_3month,
+    sum(requests) over (partition by agency_code order by asof_month rows between 11 preceding and 6 preceding)  as requests_prev_6month,
+    sum(requests) over (partition by agency_code order by asof_month rows between 23 preceding and 12 preceding) as requests_prev_12month,
 
   from joined_monthly_metrics
+),
+
+service_requests_pop as (
+  select
+    *,
+    safe_divide(requests, requests_prev_1month) - 1               as requests_pop_1month,
+    safe_divide(requests_last_3month, requests_prev_3month) - 1   as requests_pop_3month,
+    safe_divide(requests_last_6month, requests_prev_6month) - 1   as requests_pop_6month,
+    safe_divide(requests_last_12month, requests_prev_12month) - 1 as requests_pop_12month
+  from service_requests_metrics
 )
 
 select *
-from service_requests_metrics
+from service_requests_pop
 order by agency_code, asof_month
