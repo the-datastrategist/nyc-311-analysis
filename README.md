@@ -115,14 +115,24 @@ We break the ML workflow into these processes:
 
 ##### Deliverables
 
-- [Github]()
+- [Github](https://github.com/the-datastrategist/nyc-311-analysis)
 - [Presentation deck](https://docs.google.com/presentation/d/12Cg4EG7-RMxqPaBlU-Yu3KDiUAYrobDf/edit?usp=sharing&ouid=101159288067507195509&rtpof=true&sd=true)
 - [Dashboard]()
 
 ##### Referenced sources
 
 I referenced (or copied) information from the following sources during this project:
-- TODO: update resources
+
+- [Github templates](https://github.com/the-datastrategist/tds-dbt-template) I used dbt 
+templates that I've created and adjusted the setup/code to our use case as needed. I
+also referenced one of my own private dbt repos.
+
+- [BigQueryML syntax](https://docs.cloud.google.com/bigquery/docs/reference/standard-sql/bigqueryml-syntax-create) I referenced the BigQueryML documents during this analysis.
+
+- [dbt macros](https://docs.getdbt.com/docs/build/jinja-macros?version=2) I referenced this 
+documentation to make updates to the dbt macros as needed. However, the majority of the
+dbt ops code was sourced from the Github template.
+
 
 ## Next Steps
 
