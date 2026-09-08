@@ -2,7 +2,6 @@
 
 select
     asof_date,
-    agency_code,
     holiday_name,
     is_holiday,
     postholiday_days,
@@ -56,4 +55,10 @@ select
     coalesce(requests_pop_90day, 0) as requests_pop_90day,
     coalesce(requests_pop_180day, 0) as requests_pop_180day,
     coalesce(requests_pop_365day, 0) as requests_pop_365day,
-from {{ ref('int_agency_metrics') }}
+    coalesce(avg_requests_last_7day_dow, 0) as avg_requests_last_7day_dow,
+    coalesce(avg_requests_last_14day_dow, 0) as avg_requests_last_14day_dow,
+    coalesce(avg_requests_last_28day_dow, 0) as avg_requests_last_28day_dow,
+    coalesce(requests_pop_7day_dow, 0) as requests_pop_7day_dow,
+    coalesce(requests_pop_14day_dow, 0) as requests_pop_14day_dow,
+    coalesce(requests_pop_28day_dow, 0) as requests_pop_28day_dow,
+from {{ ref('int_daily_metrics') }}

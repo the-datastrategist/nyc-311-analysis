@@ -59,6 +59,16 @@ service_requests_metrics as (
     sum(requests) over (partition by agency_code order by asof_date rows between 1 following and 7 following) as requests_next_7day,
 
     -- Total Rolling Requests
+    sum(requests) over (partition by agency_code order by asof_date rows between 2 preceding and current row)  as requests_last_3day,
+    sum(requests) over (partition by agency_code order by asof_date rows between 6 preceding and current row)  as requests_last_7day,
+    sum(requests) over (partition by agency_code order by asof_date rows between 13 preceding and current row) as requests_last_14day,
+    sum(requests) over (partition by agency_code order by asof_date rows between 27 preceding and current row) as requests_last_28day,
+
+    sum(requests) over (partition by agency_code order by asof_date rows between 89 preceding and current row)  as requests_last_90day,
+    sum(requests) over (partition by agency_code order by asof_date rows between 179 preceding and current row) as requests_last_180day,
+    sum(requests) over (partition by agency_code order by asof_date rows between 364 preceding and current row) as requests_last_365day,
+
+    -- Avg Rolling Requests
     avg(requests) over (partition by agency_code order by asof_date rows between 2 preceding and current row)  as avg_requests_last_3day,
     avg(requests) over (partition by agency_code order by asof_date rows between 6 preceding and current row)  as avg_requests_last_7day,
     avg(requests) over (partition by agency_code order by asof_date rows between 13 preceding and current row) as avg_requests_last_14day,
